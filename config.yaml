@@ -1,0 +1,36 @@
+cookie:
+  expiry_days: 30
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    aem_chein:
+      email: Shar170@yandex.ru
+      name: "\u0410\u0451\u043C \u0412\u0430\u043B\u0435\u0435\u0432\u0438 \u0427\u0435\
+        \u0438\u043D"
+      password: $2b$12$ApCnkwuYeSE6oAVTs3j0HOeb8RyAg2DIoBhmht3E3fgpwRpys9f.C
+      role: eng_centr
+    jsmith:
+      email: jsmith@gmail.com
+      name: John Smith
+      password: $2b$12$ApCnkwuYeSE6oAVTs3j0HOeb8RyAg2DIoBhmht3E3fgpwRpys9f.C
+      role: ind_prof
+    rbriggs:
+      email: rbriggs@gmail.com
+      name: "\u0420\u043E\u0441\u0410\u0432\u0438\u0430\u041F\u043E\u043B\u0451\u0442"
+      password: $2b$12$gMVyHyHA3EdzIiBXu3Fjcetf3N6RMIOjPFXIUL5BBuXbqXtWxca5O
+      role: manufactory
+    muctr:
+      email: rbriggs@gmail.com
+      name: "MUCTR.RU"
+      password: $2b$12$gMVyHyHA3EdzIiBXu3Fjcetf3N6RMIOjPFXIUL5BBuXbqXtWxca5O
+      role: manufactory
+    shar170:
+      email: Shar170@yandex.ru
+      name: "\u041C\u0438\u0445\u0430\u0438\u043B \u0410\u043D\u0434\u0440\u0435\u0435\
+        \u0432\u0438\u0447 \u0411\u0430\u0431\u043A\u0438\u043D"
+      password: $2b$12$eauQLaVkEyFxuZ61KmLD0Odc7zC1NzD3fU5pP9RRRHwQ3TuHqES1.
+      role: eng_centr
+preauthorized:
+  emails:
+  - melsby@gmail.com

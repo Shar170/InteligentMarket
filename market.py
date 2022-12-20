@@ -47,8 +47,19 @@ if st.session_state["authentication_status"]:
     if 'task' in params.keys():
         st.write('Вы выбрали задачу: ')
         indx = int(params["task"][0])
-        intely_task.print(intely_task.tasks.iloc[indx], indx=indx)
-        st.file_uploader(label='Архив с решение', type=['.zip', '.rar', '.tar', '.7z'])
+        task = intely_task.tasks.iloc[indx]
+        intely_task.print(task, indx=indx)
+        place = st.empty()
+        approv = False
+        if username in task['approved_workers']:
+            place.file_uploader(label='Архив с решение', type=['.zip', '.rar', '.tar', '.7z'])
+        elif username in task['waiting_workers']:
+            place.write("Ожидается разрешение на выполнение...")
+        else:
+            approv = place.button('📧 Запросить разрешение на выполнение!')
+        if approv:
+            intely_task.add_worker(username,indx)
+            place.write("Ожидается разрешение на выполнение...")
         col_b1, col_b2 = st.columns([9,1])
         with col_b2:
             st.markdown(f'[Главная](http://localhost:8501/)')

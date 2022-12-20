@@ -55,7 +55,7 @@ def run(author: str, username, user_df=user_df):
                 user_df.to_csv(user_file)
     else:
         tab1, tab2, tab3, tab4 = st.tabs(["🌍Создать задачу", "🧠Задачи", '🔆Создать хакатон', '👨‍👨‍👦‍👦Хакатоны'])
-        with tab1:
+        with tab1: #creating
             with st.form("task_creating"):
                 st.write("Создание задачи")
     
@@ -80,12 +80,14 @@ def run(author: str, username, user_df=user_df):
                         st.success('Задача успешно создана!')
                     else:
                         st.warning('Поля не заполнены, или заполнены не корректно!') 
-        with tab2:
+        with tab2: #list of tasks
+            show_other = st.checkbox("Показать чужие задачи", value=False)
             for indx, task in intely_task.tasks.iterrows():
                 #task = intely_task.tasks.iloc[indx]
-                if task.author == author:
-                    intely_task.print(task,add_butt=False, indx=indx)
-        with tab3:
+                if task.author == author or show_other:
+                    type = 'owner' if task.author == author else 'user'
+                    intely_task.print(task,add_butt=type, indx=indx)
+        with tab3: #tender creating
             with st.form("tender_creating"):
                 st.write("Создание конкурса")
     
@@ -118,7 +120,7 @@ def run(author: str, username, user_df=user_df):
                     )
                     intely_task.tenders.to_csv(intely_task.tenders_file)
                     intely_task.print(task,indx=0)
-        with tab4:
+        with tab4: #tenders list
             for indx, tender in intely_task.tenders.iterrows():
                 #task = intely_task.tasks.iloc[indx]
                 if tender.author == author:

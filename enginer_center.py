@@ -6,6 +6,13 @@ import manufacture
 
 user_file = 'engineering_centers.csv'
 
+user_df = pd.read_csv(user_file)
+user_df = user_df[['name','username','description','professions','categories','projects','work_history']]
+user_df['categories'] = user_df['categories'].apply(lambda x: ast.literal_eval(x))
+user_df['professions'] = user_df['professions'].apply(lambda x: ast.literal_eval(x))
+
+
+
 def print(eng_center, add_butt=True):
     st.markdown('### ' + eng_center['name'])
     col1, col2 = st.columns([1, 3])
@@ -18,18 +25,22 @@ def print(eng_center, add_butt=True):
     st.markdown(f'Направления: ```{"```, ```".join(eng_center.professions)}```')
     st.write('_'*50)
 
-def run(username):
+def print_by_username(username:str, add_butt=False):
+    try:
+        eng_center = user_df[user_df.username == username].iloc[0]
+        print(eng_center,add_butt=add_butt)
+    except:
+        st.error("Такого инженирингово центра не существует")
+
+
+def run(username, user_df=user_df):
     params = st.experimental_get_query_params()
-    user_df = pd.read_csv(user_file)
-    user_df = user_df[['name','username','description','professions','categories','projects','work_history']]
-    user_df['categories'] = user_df['categories'].apply(lambda x: ast.literal_eval(x))
-    user_df['professions'] = user_df['professions'].apply(lambda x: ast.literal_eval(x))
 
     user = user_df[user_df.username == username].iloc[0]
 
     if 'user' in params.keys():
         st.write("Просмотр профиля:")
-        st.write(user.to_dict())
+        print(user, add_butt=False)
     elif 'edit_user' in params.keys():
         st.write("Редактирование профиля:")
         
@@ -38,8 +49,8 @@ def run(username):
                 'name' : st.text_input('Наименование',value= user['name']),
                 'username': username,
                 'description' : st.text_input('Описание',value= user['description']),
-                'professions' : st.multiselect('Специалисты', options=intely_task.professions),
-                'categories' :  st.multiselect('Направления', options=intely_task.science_types),
+                'professions' : st.multiselect('Специалисты', options=intely_task.professions, default=user['professions']),
+                'categories' :  st.multiselect('Направления', options=intely_task.science_types, default=user['categories']),
                 'projects' : [],
                 'work_history' :st.text_input('Общее резюмирование работ',value= user['work_history'])
             }
@@ -49,7 +60,6 @@ def run(username):
                 user_df.to_csv(user_file)
 
     else:
-        st.sidebar.markdown('[✍ Изменить профиль](http://localhost:8501/?edit_user=1)')
         st.write("Поиск задач:")
         science_types = ['Химия','Физика','Медицина','Разработка','Машиностроение','Социалогия']
 

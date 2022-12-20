@@ -7,25 +7,34 @@ import intely_task
 
 user_file = 'manufacture.csv'
 
-def print(manufcture, add_butt=True):
-    st.markdown('### ' + manufcture['name'])
+user_df = pd.read_csv(user_file)
+user_df = user_df[['name','username','description','categories','projects','work_history']]
+user_df['categories'] = user_df['categories'].apply(lambda x: ast.literal_eval(x))
 
-    st.markdown(f'> Описание: {manufcture.description}')
-    st.markdown(f"> {manufcture.work_history}")
+def print(manufacture, add_butt=True):
+    st.markdown('### ' + manufacture['name'])
+
+    st.markdown(f'> Описание: {manufacture.description}')
+    st.markdown(f"> {manufacture.work_history}")
     if add_butt:
-        st.markdown(f'[Подробнее...](http://localhost:8501/?manufcture={manufcture.username})', unsafe_allow_html=True)
-    st.markdown(f'Категории: ```{"```, ```".join(manufcture.categories)}```')
+        st.markdown(f'[Подробнее...](http://localhost:8501/?manufacture={manufacture.username})', unsafe_allow_html=True)
+    st.markdown(f'Категории: ```{"```, ```".join(manufacture.categories)}```')
     st.write('_'*50)
 
+def print_by_username(username, add_butt=False):
+    try:
+        manufacture = user_df[user_df.username == username].iloc[0]
+        print(manufacture)
+    except:
+        st.error("Произвоство не может быть отображено")
 
-def run(author: str, username):
+
+def run(author: str, username, user_df=user_df):
     params = st.experimental_get_query_params()
-    user_df = pd.read_csv(user_file)
-    user_df = user_df[['name','username','description','categories','projects','work_history']]
-    user_df['categories'] = user_df['categories'].apply(lambda x: ast.literal_eval(x))
+
     user = user_df[user_df.username == username].iloc[0]
 
-    if 'manufacture' in params.keys():
+    if 'user' in params.keys():
         st.write("Просмотр профиля:")
         print(user, add_butt=False)
     elif 'edit_user' in params.keys():
@@ -45,7 +54,6 @@ def run(author: str, username):
                 user_df = user_df.append(new_user, ignore_index=True,)
                 user_df.to_csv(user_file)
     else:
-        st.sidebar.markdown('[✍ Изменить профиль](http://localhost:8501/?edit_user=1)')
         tab1, tab2, tab3, tab4 = st.tabs(["🌍Создать задачу", "🧠Задачи", '🔆Создать хакатон', '👨‍👨‍👦‍👦Хакатоны'])
         with tab1:
             with st.form("task_creating"):

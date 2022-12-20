@@ -1,0 +1,10 @@
+{
+    "name":"Name of task",
+    "author_id": 1,
+    "description": "Short description of task",
+    "competions": [1,2,3], //id of competions
+    "additional_file": ["file_url_1", "file_url_2"],
+    "price_rub" : 100.00,
+    "price_usd" : "null",
+    
+}

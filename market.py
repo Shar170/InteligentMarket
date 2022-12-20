@@ -1,6 +1,9 @@
 import streamlit as st
 import intely_task
-#import auth_module as am
+
+import ind_prof
+import enginer_center
+import manufacture
 
 st.set_page_config(
         page_title="Inteligent Market",
@@ -38,6 +41,8 @@ if st.session_state["authentication_status"]:
 
 
     params = st.experimental_get_query_params()
+    st.sidebar.markdown('[👀 Просмотр профиля](http://localhost:8501/?user=1)')
+    st.sidebar.markdown('[✍ Изменить профиль](http://localhost:8501/?edit_user=1)')
 
     if 'task' in params.keys():
         st.write('Вы выбрали задачу: ')
@@ -48,21 +53,32 @@ if st.session_state["authentication_status"]:
         with col_b2:
             st.markdown(f'[Главная](http://localhost:8501/)')
     elif 'tender' in params.keys():
-        st.write('Вы выбрали задачу: ')
+        st.write('Вы выбрали хакатон: ')
         indx = int(params["tender"][0])
         intely_task.print_tender(intely_task.tenders.iloc[indx], indx=indx, add_resolve=True)
         col_b1, col_b2 = st.columns([9,1])
         with col_b2:
             st.markdown(f'[Главная](http://localhost:8501/)')
+    elif 'eng_center' in params.keys():
+        st.write('Вы выбрали инжениринговый центр: ')
+        indx = params["eng_center"][0]
+        enginer_center.print_by_username(indx)
+        col_b1, col_b2 = st.columns([9,1])
+        with col_b2:
+            st.markdown(f'[Главная](http://localhost:8501/)')
+    elif 'manufacture' in params.keys():
+        st.write('Вы выбрали инжениринговый центр: ')
+        indx = params["manufacture"][0]
+        manufacture.print_by_username(indx)
+        col_b1, col_b2 = st.columns([9,1])
+        with col_b2:
+            st.markdown(f'[Главная](http://localhost:8501/)')
     else:
         if config['credentials']['usernames'][username]['role'] == 'eng_centr':
-            import enginer_center
             enginer_center.run(username)
         elif config['credentials']['usernames'][username]['role'] == 'manufactory':
-            import manufacture
             manufacture.run(name, username)
         elif config['credentials']['usernames'][username]['role'] == 'ind_prof':
-            import ind_prof
             ind_prof.run()
 
 elif st.session_state["authentication_status"] == False:

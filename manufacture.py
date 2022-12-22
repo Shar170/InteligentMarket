@@ -5,6 +5,7 @@ import intely_task
 import datetime
 import intely_task
 
+import enginer_center
 user_file = 'manufacture.csv'
 
 user_df = pd.read_csv(user_file)
@@ -54,7 +55,12 @@ def run(author: str, username, user_df=user_df):
                 user_df = user_df.append(new_user, ignore_index=True,)
                 user_df.to_csv(user_file)
     else:
-        tab1, tab2, tab3, tab4 = st.tabs(["🌍Создать задачу", "🧠Задачи", '🔆Создать хакатон', '👨‍👨‍👦‍👦Хакатоны'])
+        tab0, tab01, tab1, tab2, tab3, tab4 = st.tabs(["👩‍🎓Партнёры","💼Мои проекты","🌍Создать задачу", "🧠Задачи", '🔆Создать хакатон', '👨‍👨‍👦‍👦Хакатоны'])
+        with tab01:
+            st.write("Список ваших проектов")
+        with tab0:
+            for i, row in enginer_center.user_df.iterrows():
+                st.header(row['name'])
         with tab1: #creating
             with st.form("task_creating"):
                 st.write("Создание задачи")
@@ -72,6 +78,8 @@ def run(author: str, username, user_df=user_df):
                         'description':task_description,
                         'money':task_money}
                 # Every form must have a submit button.
+                st.multiselect("Исполнитель", options=enginer_center.user_df)
+                view = st.selectbox('Видимость задачи:',['Всем пользователям','Только партнёрам'])
                 submitted = st.form_submit_button("Submit")
                 if submitted:
                     if task_name != "" and task_description != "" and task_money > 0 and len(task_categories) > 0:
@@ -79,7 +87,8 @@ def run(author: str, username, user_df=user_df):
                         intely_task.tasks.to_csv(intely_task.tasks_file)
                         st.success('Задача успешно создана!')
                     else:
-                        st.warning('Поля не заполнены, или заполнены не корректно!') 
+                        st.warning('Поля не заполнены, или заполнены не корректно!')
+
         with tab2: #list of tasks
             show_other = st.checkbox("Показать чужие задачи", value=False)
             for indx, task in intely_task.tasks.iterrows():
